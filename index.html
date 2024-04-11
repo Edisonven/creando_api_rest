@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Bienvenidos a la app</h1>
+    <input class="name" placeholder="ingresar una canción" type="text">
+    <input class="band" placeholder="Ingresar una banda" type="text">
+    <input class="year" placeholder="Ingresar un año" type="text">
+    <button class="btn">agregar</button>
+    <h2 class="song__title">Lista de canciones</h2>
+    <main class="canciones">
+
+    </main>
+    <script>
+        const inputName = document.querySelector(".name");
+        const inputBand = document.querySelector(".band");
+        const inputYear = document.querySelector(".year");
+        const btn = document.querySelector(".btn")
+        const container = document.querySelector(".canciones")
+
+        const deleteSong = async (name) => {
+            const response = await fetch(`/${name}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            }
+            );
+
+            if (response.ok) {
+                getSongs();
+            }
+        }
+
+        const getSongs = async () => {
+            try {
+                const response = await fetch("/canciones");
+                const dataSongs = await response.json();
+
+                let data = ""
+                dataSongs.forEach((d) => {
+                    data += `
+                <article style="border: 2px solid red; width: 200px;">
+                    <h3>nombre: ${d.name}</h3>
+                    <h3>banda: ${d.band}</h3>
+                    <h3>año: ${d.year}</h3>
+                    <button onclick="deleteSong('${d.name}')">Eliminar</button>
+                </article>
+                `
+                })
+                container.innerHTML = data
+
+            } catch (error) {
+                console.log("ha ocurrido un error", error)
+            }
+        }
+        getSongs();
+
+        const handlePostSong = async () => {
+            try {
+                const newSong = {
+                    name: inputName.value,
+                    band: inputBand.value,
+                    year: inputYear.value
+                }
+
+                const response = await fetch("/canciones", {
+                    method: "POST",
+                    body: JSON.stringify(newSong),
+                    headers: { "Content-Type": "application/json" }
+                });
+                if (response.ok) {
+                    getSongs();
+                }
+
+            } catch (error) {
+                console.log("ha ocurrido un error", error)
+            }
+
+        }
+
+
+        btn.addEventListener("click", () => handlePostSong());
+    </script>
+</body>
+
+</html>
