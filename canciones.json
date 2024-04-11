@@ -1,4 +1,5 @@
 [
-  { "name": "cancion 4", "band": "banda 4", "year": "54848" },
-  { "name": "", "band": "", "year": "" }
+  { "name": "cancion 1", "band": "banda 1", "year": "1990" },
+  { "name": "cancion 3", "band": "banda 3", "year": "5454" },
+  { "name": "cancion 4", "band": "banda 4", "year": "54848" }
 ]
